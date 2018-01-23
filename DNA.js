@@ -45,7 +45,9 @@ function DNA(num) {
     this.fitness = score / target.length;
     //ok it *does* show the fitnesses getting bigger.....so what happens to void them?
     // console.log(this.fitness);
-    // this.fitness = pow(2, this.fitness);
+
+    //interesting -- we cannot do 2^n in this way.
+    this.fitness = pow(this.fitness, 4);
   };
 
 

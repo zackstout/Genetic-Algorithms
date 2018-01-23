@@ -19,8 +19,8 @@ function Population(p, m, num) {
   this.calcFitness = function() {
     for (var i=0; i < this.population.length; i++) {
       //don't forget to pass in the (*this!*) target:
-      //oh but he only has target??
-      this.population[i].calcFitness(this.target);
+      //oh but he only has target?? Apparently either works. 
+      this.population[i].calcFitness(target);
       // this.population[i].calcFitness(this.target);
     }
   };
