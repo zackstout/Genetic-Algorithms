@@ -18,7 +18,8 @@ function Population(p, m, num) {
 
   this.calcFitness = function() {
     for (var i=0; i < this.population.length; i++) {
-      this.population[i].calcFitness();
+      //don't forget to pass in the target!
+      this.population[i].calcFitness(target);
     }
   };
   this.calcFitness();
@@ -35,11 +36,11 @@ function Population(p, m, num) {
 
     for (var j=0; j<this.population.length; j++) {
       //to normalize fitness values, so they sum to 1. But is it uniform?
-      var fitness = map(this.population[i].fitness, 0, maxFitness, 0, 1);
+      var fitness = map(this.population[j].fitness, 0, maxFitness, 0, 1);
       var n = floor(fitness * 100);
 
       for (var k=0; k< n; k++) {
-        this.matingPool.push(this.population[i]);
+        this.matingPool.push(this.population[k]);
       }
     }
   };
@@ -57,47 +58,48 @@ function Population(p, m, num) {
       this.population[i] = child;
     }
     this.generations++;
+    console.log(this.generations);
   };
 
 
   this.getBest = function() {
     var worldrecord = 0;
     var index = 0;
-    for (var i=0; i< population.length; i++) {
-      if (population[i].fitness > worldrecord) {
-        worldrecord = population[i].fitness;
+    for (var i=0; i< this.population.length; i++) {
+      if (this.population[i].fitness > worldrecord) {
+        worldrecord = this.population[i].fitness;
         index = i;
       }
     }
 
-    if (worldrecord == perfectScore) {
+    if (worldrecord == this.perfectScore) {
       this.finished = true;
     }
-    return population[index].getPhrase();
+    return this.population[index].getPhrase();
   };
 
-  this.done = function() {
+  this.isFinished = function() {
     return this.finished;
   };
 
   this.getGenerations = function() {
-    return generations;
+    return this.generations;
   };
 
   this.getAverageFitness = function() {
     var total = 0;
-    for (var i=0; i < population.length; i++) {
-      total += population[i].fitness;
+    for (var i=0; i < this.population.length; i++) {
+      total += this.population[i].fitness;
     }
-    return total / population.length;
+    return total / this.population.length;
   };
 
   this.allPhrases = function() {
     var everything = "";
-    var displayLimit = min(population.length, 50);
+    var displayLimit = min(this.population.length, 50);
 
     for (var i=0; i<displayLimit; i++) {
-      everything += population[i].getPhrase() + '<br>';
+      everything += this.population[i].getPhrase() + '<br>';
     }
 
     return everything;

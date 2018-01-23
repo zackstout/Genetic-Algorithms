@@ -22,6 +22,7 @@ function DNA(num) {
     this.genes[i] = newChar();
   }
 
+// genotype and phenotype are essentially the same in this case. i.e. layer between what is encoded and what encodes it is very thin:
   this.getPhrase = function() {
     return this.genes.join("");
   };

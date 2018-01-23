@@ -10,6 +10,10 @@ var stats;
 
 
 function setup() {
+  bestPhrase = selectAll('#best');
+  allPhrases = selectAll('#all');
+  stats = selectAll('#stats');
+
   // bestPhrase = createP("Best phrase:");
   // bestPhrase.class("best");
   //
@@ -35,26 +39,27 @@ function draw() {
 
   population.generate();
 
-  population.evaulate();
+  // population.evaulate();
 
   if (population.isFinished()) {
     noLoop();
+    console.log('aha!');
   }
 
-  displayInfo();
+  // displayInfo();
 }
 
 function displayInfo() {
   var answer = population.getBest();
 
-  bestPhrase.html("Best phrase:<br>" + answer);
+  bestPhrase.append("Best phrase:<br>" + answer);
 
   var statstext = "total generations:     " + population.getGenerations();
   statstext += "average fitness:      " + floor(100 * population.getAverageFitness());
   statstext += "total population:      " + popmax + "<br>";
   statstext += "mutation rate:     " + floor(mutationRate * 100) + "%, hoss";
 
-  stats.html(statstext);
+  stats.append(statstext);
 
-  allPhrases.html("All phrases:<br>" + population.allPhrases());
+  allPhrases.append("All phrases:<br>" + population.allPhrases());
 }
