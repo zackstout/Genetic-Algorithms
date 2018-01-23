@@ -2,12 +2,15 @@
 //using ASCII table:
 function newChar() {
   var c = floor(random(63, 122));
-  if (c == 63) {
-    c = 32;
-  }
-  if (c == 64) {
-    c = 46;
-  }
+  // if (c == 63) {
+  //   c = 32;
+  // }
+  // if (c == 64) {
+  //   c = 46;
+  // }
+  if (c === 63) c = 32;
+  if (c === 64) c = 46;
+
   return String.fromCharCode(c);
 }
 
@@ -29,6 +32,9 @@ function DNA(num) {
 
 
 // a pretty simplistic fitness function, but it works for the basic case:
+// in a distance-to-target case, could use 1/d.
+// would be nice to have an exponential shape: if n is number of chars correct, could use 2^n.
+
   this.calcFitness = function(target) {
     var score = 0;
     for (var i=0; i <this.genes.length; i++) {
@@ -37,6 +43,9 @@ function DNA(num) {
       }
     }
     this.fitness = score / target.length;
+    //ok it *does* show the fitnesses getting bigger.....so what happens to void them?
+    // console.log(this.fitness);
+    // this.fitness = pow(2, this.fitness);
   };
 
 
@@ -46,13 +55,16 @@ function DNA(num) {
     var midpoint = floor(random(this.genes.length));
 
     for (var i=0; i<this.genes.length; i++) {
-      if (i > midpoint) {
-        child.genes[i] = this.genes[i];
-      } else {
-        child.genes[i] = partner.genes[i];
-      }
-      return child;
+      // if (i > midpoint) {
+      //   child.genes[i] = this.genes[i];
+      // } else {
+      //   child.genes[i] = partner.genes[i];
+      // }
+      if (i > midpoint) child.genes[i] = this.genes[i];
+      else child.genes[i] = partner.genes[i];
     }
+    //must be outside for loop!
+    return child;
   };
 
   this.mutate = function(mutationRate) {

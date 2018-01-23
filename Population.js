@@ -1,7 +1,7 @@
 
 function Population(p, m, num) {
   this.population = [];
-  this.matingPool = [];
+  // this.matingPool = [];
   this.generations = 0;
   this.finished = false;
   this.target = p;
@@ -14,21 +14,26 @@ function Population(p, m, num) {
     this.population[i] = new DNA(this.target.length);
   }
 
-  // this.matingPool = [];
+  this.matingPool = [];
 
   this.calcFitness = function() {
     for (var i=0; i < this.population.length; i++) {
-      //don't forget to pass in the target!
-      this.population[i].calcFitness(target);
+      //don't forget to pass in the (*this!*) target:
+      //oh but he only has target??
+      this.population[i].calcFitness(this.target);
+      // this.population[i].calcFitness(this.target);
     }
   };
   this.calcFitness();
 
   this.naturalSelection = function() {
+    //clear:
     this.matingPool = [];
 
     var maxFitness = 0;
     for (var i=0; i<this.population.length; i++) {
+      //ok it's also here:
+      // console.log(this.population[i].fitness);
       if (this.population[i].fitness > maxFitness) {
         maxFitness = this.population[i].fitness;
       }
@@ -36,13 +41,18 @@ function Population(p, m, num) {
 
     for (var j=0; j<this.population.length; j++) {
       //to normalize fitness values, so they sum to 1. But is it uniform?
+      // console.log(this.population[j].fitness);
       var fitness = map(this.population[j].fitness, 0, maxFitness, 0, 1);
       var n = floor(fitness * 100);
 
       for (var k=0; k< n; k++) {
-        this.matingPool.push(this.population[k]);
+        //ooooh has to be at j, otherwise we might not have something in the array at that index:
+        this.matingPool.push(this.population[j]);
       }
+      // console.log(this.population[j].fitness);
+
     }
+
   };
 
   //make a new generation:
@@ -58,24 +68,35 @@ function Population(p, m, num) {
       this.population[i] = child;
     }
     this.generations++;
-    console.log(this.generations);
+    // console.log(this.generations);
   };
 
 
   this.getBest = function() {
-    var worldrecord = 0;
+    return this.best;
+  };
+
+
+  this.evaluate = function() {
+    var worldrecord = 0.0;
     var index = 0;
     for (var i=0; i< this.population.length; i++) {
+      //now they're all zero!
+      // console.log(this.population[i].fitness);
       if (this.population[i].fitness > worldrecord) {
-        worldrecord = this.population[i].fitness;
         index = i;
+
+        worldrecord = this.population[i].fitness;
       }
     }
+
+    //oooh need this:
+    this.best = this.population[index].getPhrase();
 
     if (worldrecord == this.perfectScore) {
       this.finished = true;
     }
-    return this.population[index].getPhrase();
+    // return this.population[index].getPhrase();
   };
 
   this.isFinished = function() {
@@ -89,8 +110,10 @@ function Population(p, m, num) {
   this.getAverageFitness = function() {
     var total = 0;
     for (var i=0; i < this.population.length; i++) {
+      // console.log(this.population[i].fitness);
       total += this.population[i].fitness;
     }
+    // console.log(total);
     return total / this.population.length;
   };
 

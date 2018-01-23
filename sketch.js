@@ -10,19 +10,19 @@ var stats;
 
 
 function setup() {
-  bestPhrase = selectAll('#best');
-  allPhrases = selectAll('#all');
-  stats = selectAll('#stats');
+  // bestPhrase = select('#best');
+  // allPhrases = select('#all');
+  // stats = select('#stats');
 
-  // bestPhrase = createP("Best phrase:");
-  // bestPhrase.class("best");
-  //
-  // allPhrases = createP("All phrases:");
-  // allPhrases.position(600, 10);
-  // allPhrases.class("all");
-  //
-  // stats = createP("Stats");
-  // stats.class("stats");
+  bestPhrase = createP("Best phrase:");
+  bestPhrase.class("best");
+
+  allPhrases = createP("All phrases:");
+  allPhrases.position(600, 10);
+  allPhrases.class("all");
+
+  stats = createP("Stats");
+  stats.class("stats");
 
   target = "To be or not to be.";
   popmax = 200;
@@ -33,33 +33,37 @@ function setup() {
 
 
 function draw() {
-  population.calcFitness();
 
   population.naturalSelection();
 
   population.generate();
 
-  // population.evaulate();
+//wow, the real problem was calling this at the beginning, as seems entirely natural to do....how strange!!!
+  population.calcFitness();
+
+
+//where is this coming from?
+  population.evaluate();
 
   if (population.isFinished()) {
     noLoop();
     console.log('aha!');
   }
 
-  // displayInfo();
+  displayInfo();
 }
 
 function displayInfo() {
   var answer = population.getBest();
 
-  bestPhrase.append("Best phrase:<br>" + answer);
+  bestPhrase.html("Best phrase:<br>" + answer);
 
-  var statstext = "total generations:     " + population.getGenerations();
-  statstext += "average fitness:      " + floor(100 * population.getAverageFitness());
+  var statstext = "total generations:     " + population.getGenerations() + "<br>";
+  statstext += "average fitness:      " + nf(population.getAverageFitness()) + "<br>";
   statstext += "total population:      " + popmax + "<br>";
   statstext += "mutation rate:     " + floor(mutationRate * 100) + "%, hoss";
 
-  stats.append(statstext);
+  stats.html(statstext);
 
-  allPhrases.append("All phrases:<br>" + population.allPhrases());
+  allPhrases.html("All phrases:<br>" + population.allPhrases());
 }
